@@ -7,6 +7,7 @@ package com.mycompany.learnpythoncodingknowtree;
 
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.gson.Gson;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,8 @@ public class Test {
         int page = 1;
         Gson gson = new Gson();
         Set<String> tagSet=new TreeSet<>();
-        for (page = 1; page <= 10; page++) {
+        List<Map> dList=new ArrayList<>();//儲存所有的資料
+        for (page = 1; page <= 3; page++) {
             String url = "https://api.stackexchange.com/2.2/questions?key=HBRCqQk3OxNjO0dh89T5SA((&order=desc&sort=votes&min=10&site=stackoverflow&tagged=python&pagesize=100&page=" + page;
             Map ret = gson.fromJson(HttpRequest.get(url).acceptCharset("utf-8").acceptGzipEncoding().uncompress(true).body(), Map.class);
             List<Map> items = (List) ret.get("items");
@@ -39,7 +41,9 @@ public class Test {
                 for(String tag : tags){
                     tagSet.add(tag);
                 }
+                dList.add(item);
             }
+            
             
             boolean hasMore = (boolean) ret.get("has_more");
             if (!hasMore) {
@@ -47,6 +51,9 @@ public class Test {
             }
         }
         System.out.println(Arrays.deepToString(tagSet.toArray()));
+        //把 dList 用 gson 轉成字串然後存到檔案
+        //把 tagSet 存到檔案
+        List<String> tags=new ArrayList<>(tagSet);
     }
 
 }
