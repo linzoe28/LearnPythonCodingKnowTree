@@ -1,0 +1,24 @@
+1.讀取資料
+setwd("C:/Users/imsofa/Desktop")
+d=read.csv('article.csv')
+2.查看資料狀態
+nrow(d) //資料筆數
+names(d) //查看欄位
+summary(d) //查看資料分佈
+summary(d[,1:50])
+3.去掉不必要特徵欄位(資料)
+l=colMeans(d) //計算所有標籤的平均值
+class(l)//查看型態，可不用
+quantile(l[2:2731], probs = seq(0,1,0.1)) //常態會用此方法，看要怎麼切資料
+c=l[2:2731] 
+length(c[c>0.001]) //這裡查看大約要留下多少標籤，以各標籤平均值大於0.001來決定(如平均值越小代表越少人採用)
+c=(c[c>0.001])
+n=names(c)
+n=c("id", n) //最後留下所需的資料
+4.對回原資料去掉已過濾標籤
+new_d=d[,n]
+5.確認是否標籤皆可以對回原所有資料
+rowSums(new_d[,2:219])
+new_d$rowsum=rowSums(new_d[,2:219])
+nrow(new_d[new_d$rowsum==0,])
+*發現利用218標籤可以取代原先所有的2730個標籤
