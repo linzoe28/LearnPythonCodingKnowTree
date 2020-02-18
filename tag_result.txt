@@ -22,3 +22,9 @@ rowSums(new_d[,2:219])
 new_d$rowsum=rowSums(new_d[,2:219])
 nrow(new_d[new_d$rowsum==0,])
 *發現利用218標籤可以取代原先所有的2730個標籤
+
+文章分群
+test1_d=new_d[new_d$rowsum>=1,]  //如文章有超過一個標籤以上的才會被留下來
+cluster=kmeans(test1_d[,2:218],100)
+test1_d$cluster=cluster$cluster
+hist(table(test1_d$cluster))
